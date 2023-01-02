@@ -15,6 +15,9 @@ const isUser = (req, res, next) => {
 };
 
 const isManager = (req, res, next) => {
+  if (!req.headers.authorization) {
+    return res.status(400).send({ message: "Unauthorised User" });
+  }
   const token = req.headers.authorization.replace("Bearer ", "");
   const verified = Jwt.verify(token, jwtSecretKey);
   if (verified.role == "MNG") {
@@ -24,6 +27,10 @@ const isManager = (req, res, next) => {
 };
 
 const isAdmin = (req, res, next) => {
+  if (!req.headers.authorization) {
+  
+    return res.status(400).send({ message: "Unauthorised User" });
+  }
   const token = req.headers.authorization.replace("Bearer ", "");
   const verified = Jwt.verify(token, jwtSecretKey);
   if (verified.role == "ADMIN") {
