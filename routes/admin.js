@@ -1,9 +1,11 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-var AdminContoller  = require("../Controller/AdminContoller");
-router.post('/add_users', function(req, res, next) {
-
+var AdminContoller = require("../Controller/AdminContoller");
+router.post("/add_user", function (req, res, next) {
   AdminContoller.addEmployeeOrManager(req, res, next);
-  });
-  
-  module.exports = router;
+});
+router.get("/delet_user/:_id", function (req, res, next) {
+  AdminContoller.deleteUser(req, res, next);
+});
+
+module.exports = router;
