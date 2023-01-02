@@ -3,13 +3,17 @@ var mongoose = require("mongoose");
 const registerUserController = async (req, res, next) => {
   const user = req.body;
   if (user.role == "EMP") {
-    console.log(user.managerId);
-    var managerId = mongoose.Types.ObjectId(user.managerId);
-    return User.findById(managerId).then((result) => {
+    
+   try{ var managerId = mongoose.Types.ObjectId(user.managerId);
+     User.findById(managerId).then((result) => {
       if (!result) {
         return res.send({ message: "Manager not exist" });
       }
     });
+  }catch(err)
+  {
+  return  next({ message:"Inavlid Manger Id" });
+  }
   }
   const newUser = new User({
     username: user.username,
