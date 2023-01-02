@@ -13,7 +13,6 @@ const isUser = (req, res, next) => {
     return res.send(error);
   }
 };
-
 const isManager = (req, res, next) => {
   if (!req.headers.authorization) {
     return res.status(400).send({ message: "Unauthorised User" });
