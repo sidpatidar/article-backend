@@ -6,7 +6,10 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var connect = require("./database");
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+var userRouter = require("./routes/users");
+var adminRouter = require("./routes/admin");
+var managerRouter = require("./routes/manager");
+var authMiddleware= require('./Auth/AuthMiddleware')
 var app = express();
 connect().then(
   () => {
@@ -27,7 +30,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/users", userRouter);
+app.use("/admin",authMiddleware.isAdmin, adminRouter);
+app.use("/manager",authMiddleware.isManager, managerRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

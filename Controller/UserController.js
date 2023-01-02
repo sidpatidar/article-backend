@@ -2,11 +2,6 @@ var User = require("../Models/User");
 
 const registerUserController = async (req, res, next) => {
   const user = req.body;
-  if (user.role == "EMP") {
-    if (!user.managerId) {
-      return res.status(400).json({ message: "managerId is requires" });
-    }
-  }
   const newUser = new User({
     username: user.username,
     password: user.password,

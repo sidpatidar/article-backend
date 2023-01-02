@@ -3,18 +3,13 @@ const JwtGeneration = require("../Auth/JwtConfig");
 const User = require("../Models/User");
 
 const AuthController = async (req, res, next) => {
-  const user=req.body;
-  if (
-    user.username != null &&
-    user.password != null &&
-    user.role != null
-  )
+  const user = req.body;
+  if (user.username != null && user.password != null && user.role != null)
     await User.findOne(user).then(async (result) => {
-      
       try {
         if (result != null && result) {
           const token = JwtGeneration(result);
-         return  res.json({
+          return res.json({
             data: {
               id: result._id,
               auth_ac: token,
@@ -22,7 +17,7 @@ const AuthController = async (req, res, next) => {
             message: "User Loggedin",
           });
         } else {
-        return   res.status(400).json({
+          return res.status(400).json({
             message: "Invalid Credentials",
           });
         }

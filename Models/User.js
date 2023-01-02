@@ -14,6 +14,7 @@ const User = new mongoose.Schema({
   role: {
     type: String,
     required: true,
+    enum :['EMP','MNG','ADMIN']
   },
   firstName: {
     type: String,

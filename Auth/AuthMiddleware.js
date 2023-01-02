@@ -1,16 +1,35 @@
-const JwtTokenValidator = (req,res,next) => {
-    let tokenHeaderKey = process.env.TOKEN_HEADER_KEY;
-    try {
-      const token = req.header(tokenHeaderKey);
-  
-      const verified = Jwt.verify(token, jwtSecretKey);
-      if (verified) {
-        return next();
-      } else {
-        return res.send(error);
-      }
-    } catch (error) {
-      return res.send(error);
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
+const Jwt = require("jsonwebtoken");
+const isUser = (req, res, next) => {
+  try {
+    const token = req.headers.authorization.replace("Bearer ", "");
+    const verified = Jwt.verify(token, jwtSecretKey);
+    if (verified) {
+      return next();
+    } else {
+      return res.status(500).send({ message: "User Not Found" });
     }
-  };
-  module.exports=JwtTokenValidator;
+  } catch (error) {
+    return res.send(error);
+  }
+};
+
+const isManager = (req, res, next) => {
+  const token = req.headers.authorization.replace("Bearer ", "");
+  const verified = Jwt.verify(token, jwtSecretKey);
+  if (verified.role == "MNG") {
+    return next();
+  }
+  return res.status(400).send({ message: "Unauthorised User" });
+};
+
+const isAdmin = (req, res, next) => {
+  const token = req.headers.authorization.replace("Bearer ", "");
+  const verified = Jwt.verify(token, jwtSecretKey);
+  if (verified.role == "ADMIN") {
+    return next();
+  }
+  return res.status(400).send({ message: "Unauthorised User" });
+};
+
+module.exports = { isUser, isManager, isAdmin };
