@@ -1,21 +1,15 @@
-import { Jwt } from "jsonwebtoken";
+const  Jwt =require("jsonwebtoken");
+
 const jwtSecretKey = process.env.JWT_SECRET_KEY;
-export const JwtGeneration = (loginUser) => {
-  const token = Jwt.sign(loginUser, jwtSecretKey);
-};
+ const JwtGeneration = (user) => {
 
-export const JwtTokenValidator = (req, res, next) => {
-  let tokenHeaderKey = process.env.TOKEN_HEADER_KEY;
-  try {
-    const token = req.header(tokenHeaderKey);
-
-    const verified = Jwt.verify(token, jwtSecretKey);
-    if (verified) {
-      return next();
-    } else {
-      return res.status(401).send(error);
-    }
-  } catch (error) {
-    return res.status(401).send(error);
+  const loginUser={
+    _id:user._id,
+    username:user.username,
+    role:user.role
   }
+  const token = Jwt.sign(loginUser, jwtSecretKey);
+  return token;
 };
+
+module.exports=JwtGeneration;

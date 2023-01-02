@@ -1,23 +1,16 @@
 const { json } = require("express");
 var express = require("express");
+const { Error } = require("mongoose");
 var router = express.Router();
+const AuthController = require("../Controller/AuthController");
 var registerUserController = require("../Controller/UserController");
-var getUsersController = require("../Controller/UserController");
 
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
+router.post("/login", async (req, res, next) => {
+  await AuthController(req, res, next);
 });
 
-router.post("/register", (req, res, next) => {
-  getUsersController(req.body)
-    .then((result) => {
-      if (result.code != 11000) res.send({ message: "successfully added" });
-      else res.send({ message: "Already registered" });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.send({ message: "error", data: err });
-    });
+router.post("/register", async (req, res, next) => {
+  await registerUserController(req, res, next);
 });
 
 module.exports = router;
