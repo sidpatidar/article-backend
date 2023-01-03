@@ -1,6 +1,7 @@
 var createError = require("http-errors");
 var dotenv = require("dotenv").config();
 var express = require("express");
+var cors = require('cors')
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
@@ -11,6 +12,7 @@ var adminRouter = require("./routes/admin");
 var managerRouter = require("./routes/manager");
 var authMiddleware= require('./Auth/AuthMiddleware')
 var app = express();
+app.use(cors())
 connect().then(
   () => {
     console.log("Database connected");
