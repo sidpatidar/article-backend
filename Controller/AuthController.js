@@ -4,6 +4,7 @@ const User = require("../Models/User");
 
 const AuthController = async (req, res, next) => {
   const user = req.body;
+  console.log(user)
   if (user.username != null && user.password != null && user.role != null)
     await User.findOne(user).then(async (result) => {
       try {
