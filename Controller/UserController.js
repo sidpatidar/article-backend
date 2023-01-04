@@ -2,16 +2,16 @@ var User = require("../Models/User");
 var mongoose = require("mongoose");
 var bcryptjs =require("bcryptjs")
 const registerUserController = async (req, res, next) => {
-  const salt = bcryptjs.genSaltSync(10)
+
   const user = req.body;
   try {
     const userData = await User.findOne({ _id: user.managerId });
     if (userData) {
       console.log(user.password)
-      console.log(bcryptjs.hashSync(user.password,salt))
+      
       const newUser = new User({
         username: user.username,
-        password:bcryptjs.hashSync(user.password,salt),
+        password:bcryptjs.hashSync(user.password,"$2a$10$CwTycUXWue0Thq9StjUM0u"),
         role: user.role,
         firstName: user.firstName,
         lastName: user.lastName,
