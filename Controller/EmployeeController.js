@@ -4,6 +4,7 @@ var objectConverter = require("../Util/ObjectConverter");
 
 const getAllEmployees = async (req, res, next) => {
   try {
+    
     let { page, size, managerId } = req.query;
     let filter = { role: "EMP" };
     if (!page) {
