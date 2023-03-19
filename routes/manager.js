@@ -1,9 +1,16 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 var ManagerController = require("../Controller/ManagerController");
-router.post('/add_employee', function(req, res, next) {
+const EmployeeController = require("../Controller/EmployeeController");
+router.post("/add_employee", function (req, res, next) {
+  ManagerController.addEmployee(req, res, next);
+});
 
-    ManagerController.addEmployee(req, res, next);
-  });
-  
-  module.exports = router;
+router.get("/all_employees", function (req, res, next) {
+  EmployeeController.getAllEmployees(req, res, next);
+});
+
+router.delete("/delete_employee", function (req, res, next) {
+  ManagerController.deleteEmployee(req, res, next);
+});
+module.exports = router;

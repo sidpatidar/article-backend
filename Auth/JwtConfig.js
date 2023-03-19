@@ -6,6 +6,7 @@ const JwtGeneration = (user) => {
     _id: user._id,
     username: user.username,
     role: user.role,
+    name: user.firstName + " " + user.lastName,
   };
   const token = Jwt.sign(loginUser, jwtSecretKey);
   return token;

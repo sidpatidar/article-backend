@@ -1,20 +1,34 @@
 const UserController = require("./UserController");
-var User = require("../Models/User");
-var mongoose = require("mongoose");
+const User = require("../Models/User");
+const objectConverter = require("../Util/ObjectConverter");
+
 const addEmployee = async (req, res, next) => {
   const user = req.body;
   if (user.managerId && user.role == "EMP") {
-    await UserController.registerUserController(req, res, next);
+    await UserController.registerUser(req, res, next);
   } else {
-    return res
-      .status(500)
-      .send({ message: "managerId require with employee only" });
+    return res.status(500).send({
+      message: "managerId require with employee only",
+    });
   }
 };
+
+const addManager = async (req, res, next) => {
+  const user = req.body;
+  if (user.role == "MNG") {
+    await UserController.registerUser(req, res, next);
+  } else {
+    return res.next({
+      message: "User is not manager",
+    });
+  }
+};
+
 const deleteEmployee = async (req, res, next) => {
   const user = req.body;
+
   if (user.role == "EMP") {
-    await UserController.deleteUserController(req, res, next);
+    await UserController.deleteUser(req, res, next);
   } else {
     return next({ message: "User is not Employee" });
   }
@@ -22,14 +36,37 @@ const deleteEmployee = async (req, res, next) => {
 const deleteManager = async (req, res, next) => {
   const user = req.body;
   if (user.role == "MNG") {
-    const employees = await User.find({ managerId: user.userId });
+    const employees = await User.find({ managerId: user._id, role: "EMP" });
     if (employees.length > 0) {
       return next({ message: "This manager is assigned to  employees" });
     } else {
-      return await UserController.deleteUserController(req, res, next);
+      return await UserController.deleteUser(req, res, next);
     }
   } else {
     return next({ message: "User is not manager" });
   }
 };
-module.exports = { addEmployee, deleteEmployee, deleteManager };
+
+const getAllManager = async (req, res, next) => {
+  const result = User.find({ role: "MNG" });
+  result
+    .then((data) => {
+      const managersifoList =
+        objectConverter.managerListToManagerInfoList(data);
+      return res.send({
+        message: "Successfully fetched",
+        data: managersifoList,
+      });
+    })
+    .catch((err) => {
+      return next({ message: "Something Went Wrong" });
+    });
+};
+
+module.exports = {
+  addEmployee,
+  addManager,
+  deleteEmployee,
+  deleteManager,
+  getAllManager,
+};

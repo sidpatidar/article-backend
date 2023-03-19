@@ -1,38 +1,40 @@
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Schema.ObjectId;
-const User = new mongoose.Schema({
-  userId: ObjectId,
-  username: {
+const DomainData = new mongoose.Schema({
+  domainId: ObjectId,
+  domain: {
     type: String,
+    required: true,
     unique: true,
+  },
+  da: {
+    type: Number,
     required: true,
   },
-  password: {
+  ss: {
+    type: Number,
+    required: true,
+  },
+  type: {
     type: String,
     required: true,
   },
-  role: {
-    type: String,
-    required: true,
-    enum: ["EMP", "MNG", "ADMIN"],
-  },
-  firstName: {
+  niche: {
     type: String,
     required: true,
   },
-  lastName: {
+  country: {
     type: String,
     required: true,
   },
-  managerId: {
+  isFollow: {
     type: String,
+    required: true,
   },
-  projects: [
-    {
-      id: { type: String },
-      projectName: { type: String },
-    },
-  ],
+  isPaid: {
+    type: String,
+    required: true,
+  },
 });
 
-module.exports = mongoose.model("User", User);
+module.exports = mongoose.model("DomainData", DomainData);

@@ -4,11 +4,15 @@ const User = require("../Models/User");
 
 const AuthController = async (req, res, next) => {
   const user = req.body;
-  if (user.username != null && user.password != null && user.role != null)
-    await User.findOne(user).then(async (result) => {
+  if (user.username != null && user.password != null && user.role != null) {
+    const query = {
+      username: user.username,
+      pasword: user.password,
+      role: user.role,
+    };
+
+    await User.findOne(query).then((result) => {
       try {
-        console.log(result)
-        console.log(user.password)
         if (result != null && result) {
           const token = JwtGeneration(result);
           return res.json({
@@ -19,17 +23,12 @@ const AuthController = async (req, res, next) => {
             message: "User Loggedin",
           });
         } else {
-          return res.status(400).json({
-            message: "Invalid Credentials",
-          });
+          return res.status(400).json({ message: "Invalid Credentials" });
         }
       } catch (err) {
-        next({ error: err.stack });
+        next({ message: err.message });
       }
     });
-  else
-    res.status(400).json({
-      message: "InComplete Credentials",
-    });
+  } else res.next({ message: "InComplete Credentials" });
 };
 module.exports = AuthController;
